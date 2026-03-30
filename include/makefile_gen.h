@@ -61,4 +61,7 @@ void add_template(maker_template_t* template, char* str);
 void remove_template();
 void destroy_templates(maker_template_t* template);
 
+// General IO functions
+void query_makefile();
+
 #endif

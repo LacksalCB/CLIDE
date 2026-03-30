@@ -6,13 +6,12 @@
 #include <ctype.h>
 #include <unistd.h>
 
-#define LINE_LEN 32
-
+// Dynamic Makefile Generation 
 const char* supported_languages = "C/C++";
 
 void prompt_language(makefile_t* makefile) {
 	char* language_prompt = NULL;
-	size_t line_len = LINE_LEN;
+	size_t line_len = 0;
 	ssize_t buf;
 
 	printf("\nWhat language is this makefile for? (%s)\n", supported_languages);
@@ -64,7 +63,7 @@ void prompt_file_structure(makefile_t* makefile) {
 
 			puts("\nEnter desired file names:");			
 			for (int i = 0; i < file_count+1; i++) {
-				size_t line_len = LINE_LEN;
+				size_t line_len = 0;
 				ssize_t buf = getline(&file, &line_len, stdin);
 				if (buf == -1) {
 					fprintf(stderr, "Error reading input\n");
@@ -160,6 +159,7 @@ void generate_template() {
 	dealloc_makefile(makefile);
 }
 
+// Static Makefile Generation
 
 void write_makefile(char* makefile, long fsize) {
 	FILE* fptr;
@@ -269,3 +269,24 @@ void destroy_templates(maker_template_t* templates) {
 	free(templates->template_names);
 }
 
+void query_makefile() {
+	puts("Would you like to use a template or generate a custom Makefile?");
+	puts("1) Template\n2) Custom");
+
+	unsigned short choice;
+	scanf("%hu", &choice);
+
+	while (choice > 2) {
+		puts("Please select a valid option.  (1 or 2)");
+		scanf("%hu", &choice);
+	}
+
+	while (getchar() != '\n');
+	init_templates(&templates);
+	if (choice == 1) {
+		select_template();
+	} else if (choice == 2) {
+		generate_template();
+	}
+	destroy_templates(&templates);
+}
