@@ -18,9 +18,10 @@ typedef struct MAKEFILE_STRUCT {
 
 // Generic Template Struct
 typedef struct TEMPLATES_STRUCT {
-	int template_index;
-	int template_count;
 	char** template_names;
+	char* template_name;
+	int template_count;
+	int template_index;
 }maker_template_t;
 
 // Dynamic Template Functions
@@ -50,7 +51,7 @@ void generate_template();
 
 // Static Template Functions
 
-void load_template(int template_num);
+void load_template(const char* file);
 void select_template();
 
 extern maker_template_t templates;

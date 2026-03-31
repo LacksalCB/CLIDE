@@ -5,7 +5,7 @@ LOG_DIR = logs
 BUILD_DIR = build
 BIN_DIR = bin
 
-EXEC = $(BIN_DIR)/cenv
+EXEC = $(BIN_DIR)/clide
 LOGS = $(wildcard $(LOG_DIR)/*.txt)
 
 SOURCES = $(wildcard $(SRC_DIR)/*.c)

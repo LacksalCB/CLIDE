@@ -185,14 +185,14 @@ void write_makefile(char* makefile, long fsize) {
 	fclose(fptr);
 }
 
-void load_template(int template_num) {
+void load_template(const char* file) {
 	FILE* fptr;
-	char filename[256];	
+	char filename[512];	
 	sprintf(
 		filename, 
-		"%s/.local/share/maker/templates/%s", 
+		"%s/.local/share/maker/%s/Makefile", 
 		getenv("HOME"), 
-		templates.template_names[template_num]
+		file
 	);
 	fptr = fopen(filename, "r");
 
@@ -216,6 +216,7 @@ void select_template() {
 		printf("%d) %s\n", i+1, templates.template_names[i]);	
 	}
 
+	/*
 	unsigned short template_style;
 	scanf(" %hu", &template_style);
 	switch (template_style) {
@@ -230,7 +231,8 @@ void select_template() {
 			break;
 		default:
 			puts("Invalid option.");
-	}
+	*/
+	
 }
 
 // Template Loader
