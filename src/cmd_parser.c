@@ -1,5 +1,6 @@
 #include "../include/cmd_parser.h"
 #include "../include/makefile_gen.h"
+#include "../include/dir_setup.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -44,8 +45,7 @@ int cmd_init(int argc, char** argv) {
 				break;
 			default:
 				fprintf(stderr, "Init: invalid option \'%c\'\nTry \'cenv init --help\' for more information.\n", opt);
-				exit(1);
-					
+				exit(1);	
 		}
 	}
 
@@ -54,6 +54,7 @@ int cmd_init(int argc, char** argv) {
 		exit(1);
 	}
 
+	setup_dir(dirs);
 	snprintf(path, sizeof(path), "templates/makefiles/%s/%s/%s", lang, format, dirs);
 	load_template(path);
 	
