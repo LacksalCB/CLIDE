@@ -198,11 +198,10 @@ void load_template(const char* file) {
 
 	if (!fptr) {
 		fprintf(stderr, "\'%s\' does not exist.\n  Loading from local source files instead.\n", filename);
-	}
-
-	memset(filename, 0, sizeof(filename));
-	sprintf(filename, "%s/Makefile", file);
-	fptr = fopen(filename, "r");
+	    memset(filename, 0, sizeof(filename));
+	    sprintf(filename, "%s/Makefile", file);
+	    fptr = fopen(filename, "r");
+    }
 
 	fseek(fptr, 0, SEEK_END);
 	long fsize = ftell(fptr);

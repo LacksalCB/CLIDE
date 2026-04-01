@@ -9,6 +9,8 @@
 /**
  COMMANDS:
   init [DIR]
+  set-default [settings]
+  default [DIR]
 
 
 */

@@ -26,7 +26,8 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
 test:
-	./bin/clide init . -l c -f exec -d basic
+	cd test
+	./../bin/clide init . -l c -f exec -d basic
 
 install:
 	cp -r templates ~/.local/share/maker
@@ -35,4 +36,5 @@ clean:
 	-rm $(EXEC)
 	-rm $(OBJECTS)
 	-rm $(LOGS)
+	-rm -r test/*
 
