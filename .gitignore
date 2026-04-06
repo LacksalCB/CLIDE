@@ -6,3 +6,6 @@ build/*.o
 
 # Log Files
 logs/*
+
+# Rust stuff
+rust/target/**
