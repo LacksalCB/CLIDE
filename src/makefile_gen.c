@@ -163,6 +163,7 @@ void generate_template() {
 
 void write_makefile(char* makefile, long fsize) {
 	FILE* fptr;
+    // Move to open with flag to check status  (0_EXCL)
 	if (access("Makefile", F_OK) == 0 ) {
 		puts("Overwite existing Makefile? (y/n)");
 		char overwrite_query;
@@ -282,6 +283,18 @@ void query_makefile() {
 	puts("Would you like to use a template or generate a custom Makefile?");
 	puts("1) Template\n2) Custom");
 
+    // Line input
+    char* c;
+    size_t n;
+    ssize_t buf;
+
+    buf = getline(&c, &n, stdin);
+
+    if (buf == -1) {
+        // handle error
+    }
+
+    // Char input
 	unsigned short choice;
 	scanf("%hu", &choice);
 

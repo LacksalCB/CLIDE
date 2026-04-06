@@ -22,6 +22,17 @@ static struct option flag_options[] = {
 };
 
 int cmd_help(int argc, char** argv) {
+    puts("Usage: rm [CMD] [OPTION]... [DIR]");
+    puts("Setup Command-LIne Development Environment in DIR.");
+
+    printf("  \033[1;94m-l,  --lang\033[0m,\n");
+    puts("        specify the language of the target DE");
+
+    printf("  \033[1;94m-f,  --format\033[0m,\n");
+    puts("        specify the target output file format");
+
+    printf("  \033[1;94m-d,  --dirs\033[0m,\n");
+    puts("        specify the directory layout of the target DE");
 
 
     return 0;
