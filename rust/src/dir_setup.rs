@@ -3,7 +3,7 @@ use std::env;
 
 pub fn setup_dir(dir: String, dest: String) {
     let home = env::var("HOME").expect("HOME not set"); 
-    let install_dir = format!("{home}/.local/share/maker/templates/dirs/");
+    let install_dir = format!("{home}/.local/share/clide/templates/dirs/");
 
     let script = format!("{install_dir}{dir}.sh");
     
