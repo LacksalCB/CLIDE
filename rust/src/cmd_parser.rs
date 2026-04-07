@@ -1,4 +1,5 @@
 use crate::dir_setup::setup_dir;
+use crate::makefile_gen::load_makefile;
 
 use phf::phf_map;
 use std::process::exit;
@@ -61,11 +62,12 @@ fn cmd_init(args: Vec<String>) -> Result<i8, CmdError>  {
     let format = require_opt(&matches, "f")?;
     let dirs = require_opt(&matches, "d")?;
 
-    let path = format!("templates/makefiles/{lang}/{format}/{dirs}");
+    let path = format!("makefiles/{lang}/{format}/{dirs}");
     println!("{}", path);  
 
     setup_dir(dirs, args[2].clone());
-    
+    load_makefile(path, args[2].clone());
+
     Ok(0)
 }
 
