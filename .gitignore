@@ -8,4 +8,4 @@ build/*.o
 logs/*
 
 # Rust stuff
-rust/target/**
+target/**
