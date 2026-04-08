@@ -1,1 +1,0 @@
-/home/lacksal/git/programming/clide/target/debug/clide: /home/lacksal/git/programming/clide/src/cmd_parser.rs /home/lacksal/git/programming/clide/src/dir_setup.rs /home/lacksal/git/programming/clide/src/lib.rs /home/lacksal/git/programming/clide/src/main.rs /home/lacksal/git/programming/clide/src/makefile_gen.rs
