@@ -1,11 +1,2 @@
-# Executable
-bin/*
-
-# Object files
-build/*.o
-
-# Log Files
-logs/*
-
-# Rust stuff
-target/**
+# Rust Debug/target info
+target/*
