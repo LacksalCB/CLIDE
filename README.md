@@ -10,6 +10,7 @@ CLIDE-gen (CLI-Development Environment Generator): Suite of Tools written in C a
 
 `clide [CMD] [OPTION]... [TARGET DIRECTORY]`
 Setup Command-LIne Development Environment in DIR.
+
   -l,  --lang
          specify the language of the target DE
 
