@@ -1,5 +1,5 @@
 # CLIDE-gen
-CLIDE-gen (CLI-Development Environment Generator): Suite of Tools written in C and Bash to set up/modify command line development environments:
+CLIDE-gen (CLI-Development Environment Generator): Suite of Tools written in Rust to set up/modify command line development environments:
 
 # Component Projects: (Very Deprecated)
 
