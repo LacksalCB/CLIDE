@@ -24,5 +24,6 @@ Setup Command-LIne Development Environment in DIR.
 
 # Examples
 `clide help` to display help page
+
 `clide .` to run default command (in templates/defaults.txt)
 
