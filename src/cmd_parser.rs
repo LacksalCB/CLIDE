@@ -3,6 +3,7 @@ use crate::makefile_gen::load_makefile;
 
 use phf::phf_map;
 use std::process::exit;
+use std::fs;
 extern crate getopts;
 use getopts::Options;
 
@@ -28,7 +29,7 @@ fn require_opt(matches: &getopts::Matches, flag: &str) -> Result<String, CmdErro
 }
 
 fn cmd_help(_args: Vec<String>) -> Result<i8, CmdError> {
-    println!("Usage: rm [CMD] [OPTION]... [DIR]");
+    println!("Usage: clide [CMD] [OPTION]... [ARGS]...");
     println!("Setup Command-LIne Development Environment in DIR.");
 
     println!("  \x1b[1m-l,  --lang\x1b[0m");
@@ -43,11 +44,34 @@ fn cmd_help(_args: Vec<String>) -> Result<i8, CmdError> {
     Ok(0)
 }
 
+fn cmd_default(out: String) -> Result<i8, CmdError> {
+    let default_file = "templates/defaults.txt";
+
+    let default_args = fs::read_to_string(&default_file).expect("Should not be able to read from host file");
+    let args:Vec<&str> = default_args.split(':').collect();
+
+    let lang = args[0];
+    let format = args[1];
+    let dirs = args[2].trim_end();
+
+    let path = format!("makefiles/{lang}/{format}/{dirs}");
+    println!("{}", path);  
+
+    setup_dir(dirs.to_string(), out.clone());
+    let _ = load_makefile(path.to_string(), out.clone()); // HANDLE 
+
+    Ok(0)
+}
+
 fn cmd_init(args: Vec<String>) -> Result<i8, CmdError>  {  
     let mut opts = Options::new();  
     opts.optopt("l", "lang", "specify the language of the target DE", "LANGUAGE");
     opts.optopt("f", "format", "specify the target output file format", "FORMAT");
     opts.optopt("d", "dirs", "specify the directory layout of the target DE", "DIR_LAYOUT");
+
+    if args.len() <= 3 {
+        return cmd_default(args[2].clone());
+    }
     
     let matches = opts
         .parse(&args[2..])
@@ -66,15 +90,8 @@ fn cmd_init(args: Vec<String>) -> Result<i8, CmdError>  {
     println!("{}", path);  
 
     setup_dir(dirs, args[2].clone());
-    load_makefile(path, args[2].clone());
+    let _ = load_makefile(path, args[2].clone()); // HANDLE
 
-    Ok(0)
-}
-
-fn cmd_default(args: Vec<String>) -> Result<i8, CmdError> {
-    if args[2] == "".to_string() {
-        
-    }
     Ok(0)
 }
 
@@ -88,11 +105,10 @@ fn cmd_set_default(args: Vec<String>) -> Result<i8, CmdError> {
 static COMMANDS: phf::Map<&'static str, fn(Vec<String>) -> Result<i8, CmdError>> = phf_map! {
     "help" => cmd_help as fn(Vec<String>) -> Result<i8, CmdError>,
     "init" => cmd_init as fn(Vec<String>) -> Result<i8, CmdError>,
-    "default" => cmd_default as fn(Vec<String>) -> Result<i8, CmdError>,
     "set_default" => cmd_set_default as fn(Vec<String>) -> Result<i8, CmdError>,
 };
 
-pub fn parse_commands(args: Vec<String>) -> i8 {
+pub fn parse_commands(args: Vec<String>) -> i8 { 
     if let Some(cmd_helper) = COMMANDS.get(&args[1]) {
         match cmd_helper(args) {
             Ok(_) => {}
@@ -103,7 +119,9 @@ pub fn parse_commands(args: Vec<String>) -> i8 {
         }
     } else {
         // Make better
-        println!("Error: invalid command \'{}\'", args[1]);
+        println!("Invalid command \'{}\'", args[1]);
+        println!("Try \'clide help\' for more information");
+
         exit(1);
     }   
 

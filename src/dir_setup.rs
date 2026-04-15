@@ -9,6 +9,8 @@ pub fn setup_dir(dir: String, dest: String) {
     
     println!("Running create script: \'{script}\'");
 
+    
+    println!("{dest}");
     let output = Command::new("sh")
         .arg(&script)
         .arg(&dest)
