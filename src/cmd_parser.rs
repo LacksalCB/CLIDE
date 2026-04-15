@@ -4,7 +4,6 @@ use crate::makefile_gen::load_makefile;
 use phf::phf_map;
 use std::process::exit;
 use std::fs;
-extern crate getopts;
 use getopts::Options;
 
 #[derive(Debug)]
@@ -44,10 +43,12 @@ fn cmd_help(_args: Vec<String>) -> Result<i8, CmdError> {
     Ok(0)
 }
 
-fn cmd_default(out: String) -> Result<i8, CmdError> {
+fn cmd_default(out: &str) -> Result<i8, CmdError> {
+    // TODO: Make relative, not hardcoded (and handle install script issue...)
     let default_file = "templates/defaults.txt";
 
-    let default_args = fs::read_to_string(&default_file).expect("Should not be able to read from host file");
+    // Handle creation and file IO etc in makefile_gen.rs: something like load_makefile_default();
+    let default_args = fs::read_to_string(&default_file).expect("Failed to read Defaults file");
     let args:Vec<&str> = default_args.split(':').collect();
 
     let lang = args[0];
@@ -57,8 +58,9 @@ fn cmd_default(out: String) -> Result<i8, CmdError> {
     let path = format!("makefiles/{lang}/{format}/{dirs}");
     println!("{}", path);  
 
-    setup_dir(dirs.to_string(), out.clone());
-    let _ = load_makefile(path.to_string(), out.clone()); // HANDLE 
+    // Same here, setup_dir_default() etc to handle logic elsewhere
+    setup_dir(dirs, &out);
+    let _ = load_makefile(&path, out); // HANDLE 
 
     Ok(0)
 }
@@ -70,7 +72,7 @@ fn cmd_init(args: Vec<String>) -> Result<i8, CmdError>  {
     opts.optopt("d", "dirs", "specify the directory layout of the target DE", "DIR_LAYOUT");
 
     if args.len() <= 3 {
-        return cmd_default(args[2].clone());
+        return cmd_default(&args[2]);
     }
     
     let matches = opts
@@ -89,14 +91,14 @@ fn cmd_init(args: Vec<String>) -> Result<i8, CmdError>  {
     let path = format!("makefiles/{lang}/{format}/{dirs}");
     println!("{}", path);  
 
-    setup_dir(dirs, args[2].clone());
-    let _ = load_makefile(path, args[2].clone()); // HANDLE
+    setup_dir(&dirs, &args[2]);
+    let _ = load_makefile(&path, &args[2]); // HANDLE
 
     Ok(0)
 }
 
 fn cmd_set_default(args: Vec<String>) -> Result<i8, CmdError> {
-    if args[2] == "".to_string() {
+    if args[2].is_empty() {
     
     }
     Ok(0)
@@ -108,7 +110,9 @@ static COMMANDS: phf::Map<&'static str, fn(Vec<String>) -> Result<i8, CmdError>>
     "set_default" => cmd_set_default as fn(Vec<String>) -> Result<i8, CmdError>,
 };
 
-pub fn parse_commands(args: Vec<String>) -> i8 { 
+// Make return option and handle issues
+pub fn parse_commands(args: Vec<String>) {
+    // TODO: Handle args length issues here and do some input sanitization
     if let Some(cmd_helper) = COMMANDS.get(&args[1]) {
         match cmd_helper(args) {
             Ok(_) => {}
@@ -124,8 +128,6 @@ pub fn parse_commands(args: Vec<String>) -> i8 {
 
         exit(1);
     }   
-
-    return 0;
 }
 
 

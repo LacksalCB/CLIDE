@@ -1,14 +1,15 @@
 use std::process::Command;
 use std::env;
+use std::path::PathBuf;
 
-pub fn setup_dir(dir: String, dest: String) {
-    let home = env::var("HOME").expect("HOME not set"); 
-    let install_dir = format!("{home}/.local/share/clide/templates/dirs/");
+pub fn setup_dir(dir: &str, dest: &str) {
+    let home = env::var("HOME").expect("HOME not set");
+    let script = PathBuf::from(&home)
+        .join(".local/share/clide/templates/dirs")
+        .join(&dir)
+        .with_extension(".sh");
 
-    let script = format!("{install_dir}{dir}.sh");
-    
-    println!("Running create script: \'{script}\'");
-
+    println!("Running create script: \'{}\'", script.display());
     
     println!("{dest}");
     let output = Command::new("sh")
