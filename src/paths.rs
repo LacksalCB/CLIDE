@@ -4,7 +4,7 @@ use std::env;
 
 static PATHS: phf::Map<&'static str, &str> = phf_map! {
     "linux" => "./local/share/clide",
-    "win" => "%appdata%/clide",
+    "windows" => "%appdata%/clide",
     "mac" => "Library/Application Support/clide",
 };
 
