@@ -5,7 +5,7 @@ use std::env;
 use std::path::PathBuf;
 
 
-pub fn load_makefile(path: &str, dest: &str) -> std::io::Result<()> {
+pub fn load_makefile(path: &PathBuf, dest: &str) -> std::io::Result<()> {
     let home = env::var("HOME").expect("HOME not set");
     let makefile_dir = PathBuf::from(&home)
         .join(".local/share/clide/templates")
@@ -14,7 +14,6 @@ pub fn load_makefile(path: &str, dest: &str) -> std::io::Result<()> {
     println!("Copying makefile: \'{}\'", makefile_dir.display());
 
     let makefile_text = fs::read_to_string(&makefile_dir)?;
-    println!("{makefile_text}");
     
     let mut makefile = File::create(PathBuf::from(dest).join("Makefile"))?;
     makefile.write_all(makefile_text.as_bytes())?;

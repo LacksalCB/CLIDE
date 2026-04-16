@@ -4,7 +4,9 @@ use crate::makefile_gen::load_makefile;
 use phf::phf_map;
 use std::process::exit;
 use std::fs;
+// TODO: Move to clap, supposedly more modern and robust handling of CLI arguments
 use getopts::Options;
+use std::path::PathBuf;
 
 #[derive(Debug)]
 pub enum CmdError {
@@ -27,6 +29,21 @@ fn require_opt(matches: &getopts::Matches, flag: &str) -> Result<String, CmdErro
         .ok_or_else(|| CmdError::MissingFlag(flag.to_string()))
 }
 
+fn load_template(lang: &str, format: &str, dirs: &str, dest: &str) -> Result<i8, CmdError> {
+    let makefile = "makefiles";
+    let path = PathBuf::from(&makefile)
+        .join(&lang)
+        .join(&format)
+        .join(&dirs);
+    println!("{}", path.display());  
+
+    // Same here, setup_dir_default() etc to handle logic elsewhere
+    setup_dir(dirs, &dest);
+    let _ = load_makefile(&path, dest); // HANDLE 
+
+    Ok(0) 
+}
+
 fn cmd_help(_args: Vec<String>) -> Result<i8, CmdError> {
     println!("Usage: clide [CMD] [OPTION]... [ARGS]...");
     println!("Setup Command-LIne Development Environment in DIR.");
@@ -43,11 +60,10 @@ fn cmd_help(_args: Vec<String>) -> Result<i8, CmdError> {
     Ok(0)
 }
 
-fn cmd_default(out: &str) -> Result<i8, CmdError> {
+fn cmd_default(dest: &str) -> Result<i8, CmdError> {
     // TODO: Make relative, not hardcoded (and handle install script issue...)
     let default_file = "templates/defaults.txt";
 
-    // Handle creation and file IO etc in makefile_gen.rs: something like load_makefile_default();
     let default_args = fs::read_to_string(&default_file).expect("Failed to read Defaults file");
     let args:Vec<&str> = default_args.split(':').collect();
 
@@ -55,24 +71,23 @@ fn cmd_default(out: &str) -> Result<i8, CmdError> {
     let format = args[1];
     let dirs = args[2].trim_end();
 
-    let path = format!("makefiles/{lang}/{format}/{dirs}");
-    println!("{}", path);  
-
-    // Same here, setup_dir_default() etc to handle logic elsewhere
-    setup_dir(dirs, &out);
-    let _ = load_makefile(&path, out); // HANDLE 
+    let _ = load_template(&lang, &format, &dirs, &dest);
 
     Ok(0)
 }
 
 fn cmd_init(args: Vec<String>) -> Result<i8, CmdError>  {  
     let mut opts = Options::new();  
+    // TODO: Add target language speciic build system (like make,cmake,ninja,just for C/C++, or cargo
+    // etc for rust
     opts.optopt("l", "lang", "specify the language of the target DE", "LANGUAGE");
     opts.optopt("f", "format", "specify the target output file format", "FORMAT");
     opts.optopt("d", "dirs", "specify the directory layout of the target DE", "DIR_LAYOUT");
 
+    let dest = &args[2];
+
     if args.len() <= 3 {
-        return cmd_default(&args[2]);
+        return cmd_default(dest);
     }
     
     let matches = opts
@@ -87,12 +102,8 @@ fn cmd_init(args: Vec<String>) -> Result<i8, CmdError>  {
     let lang = require_opt(&matches, "l")?;
     let format = require_opt(&matches, "f")?;
     let dirs = require_opt(&matches, "d")?;
-
-    let path = format!("makefiles/{lang}/{format}/{dirs}");
-    println!("{}", path);  
-
-    setup_dir(&dirs, &args[2]);
-    let _ = load_makefile(&path, &args[2]); // HANDLE
+   
+    let _ = load_template(&lang, &format, &dirs, dest); 
 
     Ok(0)
 }

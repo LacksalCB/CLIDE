@@ -7,11 +7,10 @@ pub fn setup_dir(dir: &str, dest: &str) {
     let script = PathBuf::from(&home)
         .join(".local/share/clide/templates/dirs")
         .join(&dir)
-        .with_extension(".sh");
+        .with_extension("sh");
 
     println!("Running create script: \'{}\'", script.display());
     
-    println!("{dest}");
     let output = Command::new("sh")
         .arg(&script)
         .arg(&dest)
