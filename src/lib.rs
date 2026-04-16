@@ -1,6 +1,7 @@
 mod cmd_parser;
 mod dir_setup;
 mod makefile_gen;
+mod paths;
 
 use std::env;
 use std::process::exit;

@@ -1,5 +1,6 @@
 use crate::dir_setup::setup_dir;
 use crate::makefile_gen::load_makefile;
+use crate::paths::load_path;
 
 use phf::phf_map;
 use std::process::exit;
@@ -30,12 +31,12 @@ fn require_opt(matches: &getopts::Matches, flag: &str) -> Result<String, CmdErro
 }
 
 fn load_template(lang: &str, format: &str, dirs: &str, dest: &str) -> Result<i8, CmdError> {
+    load_path(&lang);
     let makefile = "makefiles";
     let path = PathBuf::from(&makefile)
         .join(&lang)
         .join(&format)
         .join(&dirs);
-    println!("{}", path.display());  
 
     // Same here, setup_dir_default() etc to handle logic elsewhere
     setup_dir(dirs, &dest);
@@ -124,6 +125,8 @@ static COMMANDS: phf::Map<&'static str, fn(Vec<String>) -> Result<i8, CmdError>>
 // Make return option and handle issues
 pub fn parse_commands(args: Vec<String>) {
     // TODO: Handle args length issues here and do some input sanitization
+    
+
     if let Some(cmd_helper) = COMMANDS.get(&args[1]) {
         match cmd_helper(args) {
             Ok(_) => {}
