@@ -1,6 +1,6 @@
 use crate::dir_setup::setup_dir;
 use crate::makefile_gen::load_makefile;
-use crate::paths::load_path;
+use crate::paths::PREFIX;
 
 use phf::phf_map;
 use std::process::exit;
@@ -31,7 +31,6 @@ fn require_opt(matches: &getopts::Matches, flag: &str) -> Result<String, CmdErro
 }
 
 fn load_template(lang: &str, format: &str, dirs: &str, dest: &str) -> Result<i8, CmdError> {
-    load_path(&lang);
     let makefile = "makefiles";
     let path = PathBuf::from(&makefile)
         .join(&lang)
@@ -62,8 +61,7 @@ fn cmd_help(_args: Vec<String>) -> Result<i8, CmdError> {
 }
 
 fn cmd_default(dest: &str) -> Result<i8, CmdError> {
-    // TODO: Make relative, not hardcoded (and handle install script issue...)
-    let default_file = "templates/defaults.txt";
+    let default_file = PathBuf::from(&PREFIX.to_path_buf()).join("templates/defaults.txt");
 
     let default_args = fs::read_to_string(&default_file).expect("Failed to read Defaults file");
     let args:Vec<&str> = default_args.split(':').collect();

@@ -1,32 +1,23 @@
-use phf::phf_map;
+use std::sync::LazyLock;
 use std::path::PathBuf;
-use std::env;
 
-static PATHS: phf::Map<&'static str, &str> = phf_map! {
-    "linux" => "./local/share/clide",
-    "windows" => "%appdata%/clide",
-    "mac" => "Library/Application Support/clide",
-};
+// %USERPROFILE% -> use dir on windows
 
-// %USERPROFILE%
+pub static PREFIX: LazyLock<PathBuf> = LazyLock::new(|| {
+    let home_path = home::home_dir().expect("Could not find home directory"); 
 
+    #[cfg(target_os="linux")]
+    let path = ".local/share/clide";
 
-pub fn load_path(_file: &str) -> &str {
-    let os = std::env::consts::OS;    
+    #[cfg(target_os="windows")]
+    let path = "%appdata\\clide"; // Fix for windows one day
 
-    let home = if os == "windows" {
-        env::var("%USERPROFILE%").unwrap_or_else(|_| "%USERPROFILE%".to_string())
-    } else {
-        env::var("HOME").expect("HOME not set")
-    };
+    #[cfg(target_os="macos")]
+    let path = "Library/Application Support/clide";
 
-    if let Some(path) = PATHS.get(os) {
-        let prefix = PathBuf::from(&home).join(&path);
-        println!("path: {}", prefix.display());
+    #[cfg(not(any(target_os="linux", target_os="windows", target_os="macos")))]
+    let path = ".clide";
+   
+    return home_path.join(&path);
+});
 
-    } else {
-        println!("Invalid OS");
-    }
-
-    return "h";
-}

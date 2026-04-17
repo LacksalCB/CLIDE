@@ -7,4 +7,5 @@ edition = "2024"
 phf = { version = "0.13", features = ["macros"] }
 getopts = "0.2"
 substring = "1.4.5"
+home = "0.5.12"
 
