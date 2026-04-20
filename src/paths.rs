@@ -4,10 +4,19 @@ use std::path::PathBuf;
 use platform_dirs::AppDirs;
 
 pub static PREFIX: LazyLock<PathBuf> = LazyLock::new(||  {
-    println!("Detected OS: {}", std::env::consts::OS);
-    let prefix = AppDirs::new(Some("clide"), true).unwrap().data_dir;
+    let path = if cfg!(target_os = "macos") {
+        let home = std::env::var("HOME").expect("Home not set");
+        PathBuf::from(home)
+            .join("Library")
+            .join("Application Support")
+            .join("clide")
+    } else {
+        AppDirs::new(Some("clide"), true).unwrap().data_dir
+    };
 
-    println!("Detected OS config directory: {}", prefix.display());
-    return prefix;
+
+    println!("Detected OS: {}", std::env::consts::OS);
+    println!("Detected OS program directory: {}", path.display());
+    path
 });
 
