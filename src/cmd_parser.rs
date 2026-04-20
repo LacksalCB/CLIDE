@@ -6,6 +6,8 @@ use phf::phf_map;
 use std::process::exit;
 use std::fs;
 // TODO: Move to clap, supposedly more modern and robust handling of CLI arguments
+use clap::Parser;
+
 use getopts::Options;
 use std::path::PathBuf;
 
@@ -24,21 +26,28 @@ impl std::fmt::Display for CmdError {
     }
 }
 
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Args {
+   // Add new flags arg setup 
+}
+
 fn require_opt(matches: &getopts::Matches, flag: &str) -> Result<String, CmdError> {
     matches 
         .opt_str(flag)
         .ok_or_else(|| CmdError::MissingFlag(flag.to_string()))
 }
 
+// Load makefiles/LANG/FORMAT/DIRS/makefile
+// Setup dir on DIRS/
 fn load_template(lang: &str, format: &str, dirs: &str, dest: &str) -> Result<i8, CmdError> {
-    let makefile = "makefiles";
-    let path = PathBuf::from(&makefile)
+    let makefiles_dir = "makefiles";
+    let path = PathBuf::from(&makefiles_dir)
         .join(&lang)
         .join(&format)
         .join(&dirs);
 
-    // Same here, setup_dir_default() etc to handle logic elsewhere
-    setup_dir(dirs, &dest);
+    setup_dir(dirs, dest);
     let _ = load_makefile(&path, dest); // HANDLE 
 
     Ok(0) 
@@ -63,7 +72,14 @@ fn cmd_help(_args: Vec<String>) -> Result<i8, CmdError> {
 fn cmd_default(dest: &str) -> Result<i8, CmdError> {
     let default_file = PathBuf::from(&PREFIX.to_path_buf()).join("templates/defaults.txt");
 
-    let default_args = fs::read_to_string(&default_file).expect("Failed to read Defaults file");
+    let default_args = match fs::read_to_string(&default_file) {
+        Ok(content) => content,
+        Err(_) => {
+            let fallback_path = PathBuf::from("templates/defaults.txt");
+            fs::read_to_string(&fallback_path).expect("Both directories failed somehow")
+        }
+    };
+    
     let args:Vec<&str> = default_args.split(':').collect();
 
     let lang = args[0];
@@ -117,6 +133,7 @@ fn cmd_set_default(args: Vec<String>) -> Result<i8, CmdError> {
 static COMMANDS: phf::Map<&'static str, fn(Vec<String>) -> Result<i8, CmdError>> = phf_map! {
     "help" => cmd_help as fn(Vec<String>) -> Result<i8, CmdError>,
     "init" => cmd_init as fn(Vec<String>) -> Result<i8, CmdError>,
+    "update" => cmd_init as fn(Vec<String>) -> Result<i8, CmdError>,
     "set_default" => cmd_set_default as fn(Vec<String>) -> Result<i8, CmdError>,
 };
 

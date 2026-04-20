@@ -8,8 +8,6 @@ pub fn setup_dir(dir: &str, dest: &str) {
         .join(".local/share/clide/templates/dirs")
         .join(&dir)
         .with_extension("sh");
-
-    println!("Running create script: \'{}\'", script.display());
     
     let output = Command::new("sh")
         .arg(&script)

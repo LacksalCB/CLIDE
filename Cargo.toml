@@ -9,4 +9,5 @@ getopts = "0.2"
 substring = "1.4.5"
 home = "0.5.12"
 platform-dirs = "0.3.0"
+clap = { version = "4.6.1", features = ["derive"] }
 

@@ -17,15 +17,15 @@ UNAME=$( command -v uname)
 case $( "${UNAME}" | tr '[:upper:]' '[:lower:]') in
   linux*)
     echo 'OS: linux';
-    INSTALL_PATH=$HOME/.local/share/$CLIDE; 
+    INSTALL_PATH="$HOME/.local/share/$CLIDE"; 
     ;;
   darwin*)
     echo 'OS: MacOS';
-    INSTALL_PATH=$HOME/Library/Application Support/$CLIDE; 
+    INSTALL_PATH="$HOME/Library/Application Support/$CLIDE"; 
     ;;
   msys*|cygwin*|mingw*|nt*|win*)
     echo 'OS: Windows with Linux CL';
-    INSTALL_PATH=$(cygpath "$APPDATA")/$CLIDE; 
+    INSTALL_PATH="$(cygpath "$APPDATA")/$CLIDE"; 
     ;;
   *)
     echo 'OS: Unknown';
@@ -33,14 +33,14 @@ case $( "${UNAME}" | tr '[:upper:]' '[:lower:]') in
     ;;
 esac
 
-if [ ! -d $INSTALL_PATH ]; then
-    mkdir $INSTALL_PATH
+if [ ! -d "$INSTALL_PATH" ]; then
+    mkdir -p "$INSTALL_PATH"
 fi
 
 select strictreply in "Yes" "No"; do
     relaxedreply=${strictreply:-$REPLY}
     case $relaxedreply in
-        Yes | yes | y ) echo "Installing templates..."; cp -r templates $INSTALL_PATH; break;;
+        Yes | yes | y ) echo "Installing templates..."; cp -r templates/ "$INSTALL_PATH"; break;;
         No  | no  | n ) exit;;
     esac
 done
