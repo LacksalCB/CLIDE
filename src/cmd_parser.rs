@@ -41,7 +41,7 @@ fn require_opt(matches: &getopts::Matches, flag: &str) -> Result<String, CmdErro
 // Load makefiles/LANG/FORMAT/DIRS/makefile
 // Setup dir on DIRS/
 fn load_template(lang: &str, format: &str, dirs: &str, dest: &str) -> Result<i8, CmdError> {
-    let template_dir = PathBuf::from(&PREFIX.to_path_buf()).join("templates");
+    let template_dir = PathBuf::from(&PREFIX.to_path_buf());
     
     let dirs_path = PathBuf::from(&template_dir)
         .join("dirs")
