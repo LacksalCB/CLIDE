@@ -41,14 +41,23 @@ fn require_opt(matches: &getopts::Matches, flag: &str) -> Result<String, CmdErro
 // Load makefiles/LANG/FORMAT/DIRS/makefile
 // Setup dir on DIRS/
 fn load_template(lang: &str, format: &str, dirs: &str, dest: &str) -> Result<i8, CmdError> {
-    let makefiles_dir = "makefiles";
-    let path = PathBuf::from(&makefiles_dir)
+    let template_dir = PathBuf::from(&PREFIX.to_path_buf()).join("templates");
+    
+    let dirs_path = PathBuf::from(&template_dir)
+        .join("dirs")
+        .join(&dirs)
+        .with_extension("sh");
+
+
+    let makefile_path = PathBuf::from(&template_dir)
+        .join("makefiles")
         .join(&lang)
         .join(&format)
-        .join(&dirs);
+        .join(&dirs)
+        .join("Makefile");
 
-    setup_dir(dirs, dest);
-    let _ = load_makefile(&path, dest); // HANDLE 
+    setup_dir(&dirs_path, dest);
+    let _ = load_makefile(&makefile_path, dest); // HANDLE 
 
     Ok(0) 
 }

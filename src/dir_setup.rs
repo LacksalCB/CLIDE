@@ -1,14 +1,8 @@
 use std::process::Command;
-use std::env;
 use std::path::PathBuf;
 
-pub fn setup_dir(dir: &str, dest: &str) {
-    let home = env::var("HOME").expect("HOME not set");
-    let script = PathBuf::from(&home)
-        .join(".local/share/clide/templates/dirs")
-        .join(&dir)
-        .with_extension("sh");
-    
+pub fn setup_dir(script: &PathBuf, dest: &str) {
+    println!("Running dir setup script: \'{}\'", script.display());
     let output = Command::new("sh")
         .arg(&script)
         .arg(&dest)
