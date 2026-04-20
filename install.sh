@@ -41,7 +41,7 @@ fi
 select strictreply in "Yes" "No"; do
     relaxedreply=${strictreply:-$REPLY}
     case $relaxedreply in
-        Yes | yes | y ) echo "Installing templates..."; cp -r "templates/$INSTALL_PATH"; break;;
+        Yes | yes | y ) echo "Installing templates..."; cp -r templates/* "$INSTALL_PATH"; break;;
         No  | no  | n ) exit;;
     esac
 done
