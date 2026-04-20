@@ -34,6 +34,7 @@ case $( "${UNAME}" | tr '[:upper:]' '[:lower:]') in
 esac
 
 if [ ! -d "$INSTALL_PATH" ]; then
+    echo 'Creating program data...'
     mkdir -p "$INSTALL_PATH"
 fi
 
