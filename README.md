@@ -33,3 +33,10 @@ Setup Command-LIne Development Environment in DIR.
 
 `clide .` to run default command (in templates/defaults.txt)
 
+# Testers
+A special thank you to my testers (in no particular order):
+
+https://github.com/RishiKandimalla
+https://github.com/haider67795
+https://github.com/BenWolc
+https://github.com/MajorCadence
