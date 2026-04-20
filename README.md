@@ -6,6 +6,12 @@ CLIDE-gen (CLI-Development Environment Generator): Suite of Tools written in Rus
 1. Maker: https://github.com/LacksalCB/maker
 2. Snippets: https://github.com/LacksalCB/Snippets
 
+# Installation
+Run `bash install.sh` to build and copy template files into system file location
+1. Linux:   .local/share/clide 
+2. Windows: %appdata%/clide
+3. Mac:     Library/Application Support/clide 
+
 # Usage
 
 `clide [CMD] [OPTION]... [TARGET DIRECTORY]`
