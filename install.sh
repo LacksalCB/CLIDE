@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# TODO: Add user prompt to confirm moves
-
 echo "Building..."
 cargo build
 echo "Build complete"
@@ -32,6 +30,8 @@ case $( "${UNAME}" | tr '[:upper:]' '[:lower:]') in
     exit
     ;;
 esac
+
+echo "$INSTALL_PATH"
 
 if [ ! -d "$INSTALL_PATH" ]; then
     echo 'Creating program data...'
