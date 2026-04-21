@@ -13,10 +13,6 @@ pub static PREFIX: LazyLock<PathBuf> = LazyLock::new(||  {
     } else {
         AppDirs::new(Some("clide"), true).unwrap().data_dir
     };
-
-
-    println!("Detected OS: {}", std::env::consts::OS);
-    println!("Detected OS program directory: {}", path.display());
     path
 });
 

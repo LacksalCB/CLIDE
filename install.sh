@@ -1,11 +1,5 @@
 #!/bin/bash
 
-echo "Building..."
-cargo build
-echo "Build complete"
-
-echo "Copy templates to system?" 
-
 # Detect OS and determine install path 
 
 # Retrieved from: https://gist.github.com/prabirshrestha/3080525
@@ -31,12 +25,7 @@ case $( "${UNAME}" | tr '[:upper:]' '[:lower:]') in
     ;;
 esac
 
-echo "$INSTALL_PATH"
-
-if [ ! -d "$INSTALL_PATH" ]; then
-    echo 'Creating program data...'
-    mkdir -p "$INSTALL_PATH"
-fi
+echo "Copy templates to system?" 
 
 select strictreply in "Yes" "No"; do
     relaxedreply=${strictreply:-$REPLY}
@@ -45,6 +34,13 @@ select strictreply in "Yes" "No"; do
         No  | no  | n ) exit;;
     esac
 done
+
+echo "$INSTALL_PATH"
+
+if [ ! -d "$INSTALL_PATH" ]; then
+    echo 'Creating program data...'
+    mkdir -p "$INSTALL_PATH"
+fi
 
 echo "Finished install"
 
