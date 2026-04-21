@@ -15,10 +15,6 @@ case $( "${UNAME}" | tr '[:upper:]' '[:lower:]') in
     echo 'OS: MacOS';
     INSTALL_PATH="$HOME/Library/Application Support/$CLIDE"; 
     ;;
-  msys*|cygwin*|mingw*|nt*|win*)
-    echo 'OS: Windows with Linux CL';
-    INSTALL_PATH="$(cygpath "$APPDATA")/$CLIDE"; 
-    ;;
   *)
     echo 'OS: Unknown';
     exit
