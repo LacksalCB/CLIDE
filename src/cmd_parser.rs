@@ -97,7 +97,7 @@ fn cmd_default(dest: &str) -> Result<i8, CmdError> {
 
     let _ = load_template(&lang, &format, &dirs, &dest);
 
-    Ok(0)w
+    Ok(0)
 }
 
 fn cmd_init(args: Vec<String>) -> Result<i8, CmdError>  {  
