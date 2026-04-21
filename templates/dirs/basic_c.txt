@@ -1,0 +1,1 @@
+bin:build:include:logs:src:src/main.c

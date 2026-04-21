@@ -46,7 +46,7 @@ fn load_template(lang: &str, format: &str, dirs: &str, dest: &str) -> Result<i8,
     let dirs_path = PathBuf::from(&template_dir)
         .join("dirs")
         .join(&dirs)
-        .with_extension("sh");
+        .with_extension("txt");
 
 
     let makefile_path = PathBuf::from(&template_dir)
@@ -56,7 +56,7 @@ fn load_template(lang: &str, format: &str, dirs: &str, dest: &str) -> Result<i8,
         .join(&dirs)
         .join("Makefile");
 
-    setup_dir(&dirs_path, dest);
+    let _ = setup_dir(&dirs_path, dest);
     let _ = load_makefile(&makefile_path, dest); // HANDLE 
 
     Ok(0) 
